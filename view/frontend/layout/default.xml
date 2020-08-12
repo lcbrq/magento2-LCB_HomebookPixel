@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">    
+    <body>
+        <container name="lcbrq.homebook.pixel" as="lcbrq_homebook_pixel" label="Homebook Pixel" after="before.body.end">
+            <block ifconfig="lcbrq_homebook_pixel/general/enable" class="LCB\HomebookPixel\Block\Tracking" name="lcbrq_homebook_pixel" after="-" template="LCB_HomebookPixel::tracking.phtml" />
+        </container>
+    </body>
+</page>

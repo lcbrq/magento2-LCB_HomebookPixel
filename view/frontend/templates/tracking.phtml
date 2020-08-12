@@ -1,0 +1,36 @@
+<?php
+/**
+ * @var LCB\HomebookPixel\Block\Tracking $block
+ */
+?>
+<script type="text/javascript">
+    (function (f, a, s, h, i, o, n) {
+        f['HmbkTrackerObject'] = f['HmbkTrackerObject'] || []; f['HmbkTrackerObject'].push(i);
+        f[i] = f[i] || function () { (f[i].q = f[i].q || []).push(arguments) }; o = a.createElement(s),
+        n = a.getElementsByTagName(s)[0]; o.async = 1; o.src = h; n.parentNode.insertBefore(o, n);
+    })(window, document, 'script', 'https://pixel.homebook.pl/Tracker/TrackerJs', 'hmbk');
+    
+    <?php if ($block->getIsCheckout() && ($order = $this->getOrder())):
+        $skus = [];
+        foreach ($order->getItems() as $item) {
+            $skus[] = $item->getSku();
+        }
+        ?>
+        hmbk('trackSales', <?php echo json_encode($skus); ?>, '<?php echo round($order->getGrandTotal(), 2); ?>', '<?php echo $order->getIncrementId(); ?>');
+    <?php else: ?>
+        require([
+            'jquery'
+        ], function ($) {
+            $(document).on( "ajax:addToCart", function(event, sku) {
+                var price = 0;
+                if ($('[data-product-sku="' + sku +'"] .price').length) {
+                    let priceContainerData = $('[data-product-sku="' + sku +'"] .price').text();
+                    priceContainerData = priceContainerData.replace(',', '.');
+                    price = parseFloat(priceContainerData);
+                }
+                hmbk('trackAddToCart', sku, price);
+            });
+        });        
+    <?php endif; ?>
+    
+</script>
